@@ -3,8 +3,16 @@ import { buildColorMap } from "../lib/remap";
 import { presets, type Preset } from "../lib/presets";
 
 const slotPreview: Array<keyof Preset["colors"]> = [
-  "base", "surface1", "overlay1", "text",
-  "blue", "green", "yellow", "red", "pink", "mauve",
+  "base",
+  "surface1",
+  "overlay1",
+  "text",
+  "blue",
+  "green",
+  "yellow",
+  "red",
+  "pink",
+  "mauve",
 ];
 
 export function PresetRail() {
@@ -63,7 +71,9 @@ export function PresetRail() {
                 >
                   <span className="truncate">{preset.name}</span>
                   {active && (
-                    <span className="font-mono text-[10px] text-accent">src</span>
+                    <span className="font-mono text-[10px] text-accent">
+                      src
+                    </span>
                   )}
                 </button>
               );
@@ -76,7 +86,10 @@ export function PresetRail() {
           <div className="mt-2 flex flex-col gap-1.5">
             {presets.map((preset) => {
               const isPreview = previewPreset?.id === preset.id;
-              const disabled = !palette.length || !sourcePreset || sourcePreset.id === preset.id;
+              const disabled =
+                !palette.length ||
+                !sourcePreset ||
+                sourcePreset.id === preset.id;
               return (
                 <button
                   key={preset.id}
@@ -88,13 +101,20 @@ export function PresetRail() {
                     isPreview
                       ? "border-accent"
                       : "border-hairline hover:border-text-dim",
-                    disabled && "cursor-not-allowed opacity-40 hover:border-hairline",
-                  ].filter(Boolean).join(" ")}
+                    disabled &&
+                      "cursor-not-allowed opacity-40 hover:border-hairline",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="truncate text-[12px] text-text">{preset.name}</span>
+                    <span className="truncate text-[12px] text-text">
+                      {preset.name}
+                    </span>
                     {isPreview && (
-                      <span className="font-mono text-[10px] text-accent">preview</span>
+                      <span className="font-mono text-[10px] text-accent">
+                        preview
+                      </span>
                     )}
                   </div>
                   <div className="flex h-3 gap-px">

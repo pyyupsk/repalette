@@ -5,7 +5,8 @@ import { isLight } from "../lib/colors";
 const DEFAULT_TOP = 30;
 
 export function PaletteList() {
-  const { palette, selectedHex, effectiveMapping, mapping, dispatch } = useApp();
+  const { palette, selectedHex, effectiveMapping, mapping, dispatch } =
+    useApp();
   const [showAll, setShowAll] = useState(false);
 
   const list = useMemo(
@@ -61,7 +62,9 @@ export function PaletteList() {
                     <span className="font-mono text-[11px] text-text-mid line-through decoration-text-dim">
                       {s.hex.replace(/^#/, "")}
                     </span>
-                    <span className="font-mono text-[10px] text-text-dim">→</span>
+                    <span className="font-mono text-[10px] text-text-dim">
+                      →
+                    </span>
                     <SwatchTile hex={target} small />
                     <span className="font-mono text-[11px] text-text">
                       {target.replace(/^#/, "")}
@@ -93,9 +96,7 @@ export function PaletteList() {
           onClick={() => setShowAll((v) => !v)}
           className="border-t border-hairline bg-panel py-2 font-mono text-[11px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
         >
-          {showAll
-            ? `show top ${DEFAULT_TOP}`
-            : `show all ${palette.length}`}
+          {showAll ? `show top ${DEFAULT_TOP}` : `show all ${palette.length}`}
         </button>
       )}
     </div>

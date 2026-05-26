@@ -4,8 +4,20 @@ import { type Preset, type PresetSlot, presets } from "./presets";
 type SlotEntry = { slot: PresetSlot; rgb: RGB };
 
 const ACCENT_SLOTS = new Set<PresetSlot>([
-  "rosewater", "flamingo", "pink", "mauve", "red", "maroon",
-  "peach", "yellow", "green", "teal", "sky", "sapphire", "blue", "lavender",
+  "rosewater",
+  "flamingo",
+  "pink",
+  "mauve",
+  "red",
+  "maroon",
+  "peach",
+  "yellow",
+  "green",
+  "teal",
+  "sky",
+  "sapphire",
+  "blue",
+  "lavender",
 ]);
 
 const clamp = (v: number) => (v < 0 ? 0 : v > 255 ? 255 : v) | 0;

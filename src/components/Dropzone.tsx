@@ -64,9 +64,7 @@ export function Dropzone({ onFile, error }: Props) {
           Choose file
         </button>
         {error && (
-          <p className="font-mono text-[11px] text-text-mid">
-            {error}
-          </p>
+          <p className="font-mono text-[11px] text-text-mid">{error}</p>
         )}
       </div>
       <p

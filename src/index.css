@@ -3,37 +3,50 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-    --color-bg: var(--bg);
-    --color-panel: var(--panel);
-    --color-raised: var(--raised);
-    --color-hairline: var(--hairline);
-    --color-text: var(--text);
-    --color-text-mid: var(--text-mid);
-    --color-text-dim: var(--text-dim);
-    --color-accent: oklch(70% 0.25 350);
-    --color-accent-soft: oklch(70% 0.25 350 / 0.18);
-    --color-accent-ring: oklch(70% 0.25 350 / 0.4);
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-raised: var(--raised);
+  --color-hairline: var(--hairline);
+  --color-text: var(--text);
+  --color-text-mid: var(--text-mid);
+  --color-text-dim: var(--text-dim);
+  --color-accent: oklch(70% 0.25 350);
+  --color-accent-soft: oklch(70% 0.25 350 / 0.18);
+  --color-accent-ring: oklch(70% 0.25 350 / 0.4);
 
-    --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-    --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
 
-    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
-    --bg: oklch(98% 0.004 350);
-    --panel: oklch(96% 0.005 350);
-    --raised: oklch(93% 0.006 350);
-    --hairline: oklch(88% 0.008 350);
-    --text: oklch(20% 0.01 350);
-    --text-mid: oklch(45% 0.008 350);
-    --text-dim: oklch(65% 0.006 350);
-    color-scheme: light;
+  --bg: oklch(98% 0.004 350);
+  --panel: oklch(96% 0.005 350);
+  --raised: oklch(93% 0.006 350);
+  --hairline: oklch(88% 0.008 350);
+  --text: oklch(20% 0.01 350);
+  --text-mid: oklch(45% 0.008 350);
+  --text-dim: oklch(65% 0.006 350);
+  color-scheme: light;
 }
 
 :root[data-theme="dark"] {
+  --bg: oklch(15% 0.006 350);
+  --panel: oklch(18% 0.008 350);
+  --raised: oklch(22% 0.008 350);
+  --hairline: oklch(28% 0.008 350);
+  --text: oklch(94% 0.005 350);
+  --text-mid: oklch(70% 0.006 350);
+  --text-dim: oklch(50% 0.006 350);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
     --bg: oklch(15% 0.006 350);
     --panel: oklch(18% 0.008 350);
     --raised: oklch(22% 0.008 350);
@@ -42,60 +55,49 @@
     --text-mid: oklch(70% 0.006 350);
     --text-dim: oklch(50% 0.006 350);
     color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-        --bg: oklch(15% 0.006 350);
-        --panel: oklch(18% 0.008 350);
-        --raised: oklch(22% 0.008 350);
-        --hairline: oklch(28% 0.008 350);
-        --text: oklch(94% 0.005 350);
-        --text-mid: oklch(70% 0.006 350);
-        --text-dim: oklch(50% 0.006 350);
-        color-scheme: dark;
-    }
+  }
 }
 
 html,
 body,
 #root {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-    background: var(--color-accent-soft);
-    color: var(--text);
+  background: var(--color-accent-soft);
+  color: var(--text);
 }
 
 :focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--color-accent-ring);
-    border-radius: 2px;
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--color-accent-ring);
+  border-radius: 2px;
 }
 
 button,
 [role="button"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

@@ -89,19 +89,29 @@ export const reducer = (state: State, action: Action): State => {
       return { ...state, selectedHex: action.hex };
     case "edit": {
       const next = new Map(state.mapping);
-      if (action.to === null || action.to === action.from) next.delete(action.from);
+      if (action.to === null || action.to === action.from)
+        next.delete(action.from);
       else next.set(action.from, action.to);
       return { ...state, mapping: next };
     }
     case "preview":
-      return { ...state, previewMapping: action.mapping, previewPreset: action.preset };
+      return {
+        ...state,
+        previewMapping: action.mapping,
+        previewPreset: action.preset,
+      };
     case "commit-preview": {
       if (!state.previewMapping) return state;
       const next = new Map(state.mapping);
       for (const [k, v] of state.previewMapping) {
         if (k !== v) next.set(k, v);
       }
-      return { ...state, mapping: next, previewMapping: null, previewPreset: null };
+      return {
+        ...state,
+        mapping: next,
+        previewMapping: null,
+        previewPreset: null,
+      };
     }
     case "revert-preview":
       return { ...state, previewMapping: null, previewPreset: null };

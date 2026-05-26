@@ -5,7 +5,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState, (s) => ({
     ...s,
     theme:
-      (typeof localStorage !== "undefined" && (localStorage.getItem("theme") as Theme)) ||
+      (typeof localStorage !== "undefined" &&
+        (localStorage.getItem("theme") as Theme)) ||
       "system",
   }));
 
@@ -27,6 +28,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return m;
   }, [state.mapping, state.previewMapping]);
 
-  const value: Ctx = { ...state, dispatch, effectiveMapping };
+  const value = useMemo<Ctx>(
+    () => ({ ...state, dispatch, effectiveMapping }),
+    [state, effectiveMapping],
+  );
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

@@ -15,7 +15,8 @@ export function ThemeToggle() {
     >
       {order.map((t) => {
         const active = t === theme;
-        const Icon = t === "light" ? IconSun : t === "dark" ? IconMoon : IconMonitor;
+        const Icon =
+          t === "light" ? IconSun : t === "dark" ? IconMoon : IconMonitor;
         return (
           <button
             key={t}

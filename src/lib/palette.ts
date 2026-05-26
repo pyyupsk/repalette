@@ -8,7 +8,9 @@ export type PaletteResult = {
   indices: Map<string, Uint32Array>;
 };
 
-export const extractPalette = (image: HTMLImageElement | ImageBitmap): PaletteResult => {
+export const extractPalette = (
+  image: HTMLImageElement | ImageBitmap,
+): PaletteResult => {
   const width = image.width;
   const height = image.height;
   const total = width * height;

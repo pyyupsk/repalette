@@ -1,0 +1,12 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.format.oxc": "always",
+    "source.fixAll.oxc": "always"
+  },
+  "oxc.lint.run": "onType",
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
+}

@@ -1,7 +1,8 @@
 import { useApp } from "../state/useApp";
 
 export function StatusBar() {
-  const { image, palette, mapping, previewPreset, sourcePreset, status } = useApp();
+  const { image, palette, mapping, previewPreset, sourcePreset, status } =
+    useApp();
   if (!image) return null;
 
   return (
@@ -14,13 +15,9 @@ export function StatusBar() {
           {image.width}×{image.height}
         </span>
         <span className="text-text-dim">·</span>
-        <span className="tabular-nums">
-          {palette.length} colors
-        </span>
+        <span className="tabular-nums">{palette.length} colors</span>
         <span className="text-text-dim">·</span>
-        <span className="tabular-nums">
-          {mapping.size} mapped
-        </span>
+        <span className="tabular-nums">{mapping.size} mapped</span>
         {sourcePreset && (
           <>
             <span className="text-text-dim">·</span>

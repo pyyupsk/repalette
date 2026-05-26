@@ -6,10 +6,12 @@ import { IconCopy } from "./icons";
 const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
 export function Inspector() {
-  const { selectedHex, palette, mapping, effectiveMapping, dispatch } = useApp();
+  const { selectedHex, palette, mapping, effectiveMapping, dispatch } =
+    useApp();
   const swatch = palette.find((s) => s.hex === selectedHex);
-  const currentTarget =
-    selectedHex ? effectiveMapping.get(selectedHex) ?? selectedHex : null;
+  const currentTarget = selectedHex
+    ? (effectiveMapping.get(selectedHex) ?? selectedHex)
+    : null;
 
   if (!swatch || !selectedHex || !currentTarget) {
     return (
@@ -46,7 +48,14 @@ type BodyProps = {
   dispatch: ReturnType<typeof useApp>["dispatch"];
 };
 
-function InspectorBody({ hex, currentTarget, count, pct, edited, dispatch }: BodyProps) {
+function InspectorBody({
+  hex,
+  currentTarget,
+  count,
+  pct,
+  edited,
+  dispatch,
+}: BodyProps) {
   const [r, g, b] = hexToRgb(currentTarget);
   const [draft, setDraft] = useState(currentTarget.replace(/^#/, ""));
 
@@ -138,9 +147,21 @@ function InspectorBody({ hex, currentTarget, count, pct, edited, dispatch }: Bod
         </div>
 
         <div className="flex flex-col gap-2">
-          <ChannelRow label="R" value={r} onChange={(v) => writeChannel(0, v)} />
-          <ChannelRow label="G" value={g} onChange={(v) => writeChannel(1, v)} />
-          <ChannelRow label="B" value={b} onChange={(v) => writeChannel(2, v)} />
+          <ChannelRow
+            label="R"
+            value={r}
+            onChange={(v) => writeChannel(0, v)}
+          />
+          <ChannelRow
+            label="G"
+            value={g}
+            onChange={(v) => writeChannel(1, v)}
+          />
+          <ChannelRow
+            label="B"
+            value={b}
+            onChange={(v) => writeChannel(2, v)}
+          />
         </div>
 
         <div className="flex items-center justify-between border-t border-hairline pt-3">
@@ -167,8 +188,14 @@ function InspectorBody({ hex, currentTarget, count, pct, edited, dispatch }: Bod
 }
 
 function ChannelRow({
-  label, value, onChange,
-}: { label: string; value: number; onChange: (v: number) => void }) {
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="w-3 font-mono text-[11px] text-text-mid">{label}</span>
