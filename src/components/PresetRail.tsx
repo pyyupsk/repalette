@@ -1,20 +1,31 @@
 import { cn } from "../lib/cn";
-import { presets, type Preset } from "../lib/presets";
+import { type HueBucket, type Preset, presets } from "../lib/presets";
 import { buildColorMap } from "../lib/remap";
 import { useApp } from "../state/useApp";
 
-const slotPreview: Array<keyof Preset["colors"]> = [
-  "base",
-  "surface1",
-  "overlay1",
-  "text",
-  "blue",
-  "green",
-  "yellow",
+const ACCENT_ORDER: HueBucket[] = [
   "red",
+  "orange",
+  "yellow",
+  "green",
+  "cyan",
+  "blue",
+  "purple",
   "pink",
-  "mauve",
 ];
+
+const previewSwatches = (preset: Preset): string[] => {
+  const n = preset.neutrals;
+  const picks: string[] = [];
+  if (n.length) picks.push(n[0]);
+  if (n.length > 1) picks.push(n[Math.floor(n.length / 2)]);
+  if (n.length > 2) picks.push(n[n.length - 1]);
+  for (const bucket of ACCENT_ORDER) {
+    const hex = preset.accents[bucket];
+    if (hex) picks.push(hex);
+  }
+  return picks;
+};
 
 export function PresetRail() {
   const { palette, sourcePreset, previewPreset, dispatch } = useApp();
@@ -112,11 +123,11 @@ export function PresetRail() {
                     )}
                   </div>
                   <div className="flex h-3 gap-px">
-                    {slotPreview.map((slot) => (
+                    {previewSwatches(preset).map((hex) => (
                       <span
-                        key={slot}
+                        key={hex}
                         className="flex-1 rounded-[1px]"
-                        style={{ background: preset.colors[slot] }}
+                        style={{ background: hex }}
                       />
                     ))}
                   </div>
