@@ -5,6 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>repalette</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          var sys = matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = t === "dark" || (t !== "light" && sys);
+          var el = document.documentElement;
+          el.style.colorScheme = dark ? "dark" : "light";
+          el.style.background = dark
+            ? "oklch(15% 0.006 350)"
+            : "oklch(98% 0.004 350)";
+          if (t === "light" || t === "dark") el.setAttribute("data-theme", t);
+        } catch (_) {}
+      })();
+    </script>
   </head>
 
   <body>

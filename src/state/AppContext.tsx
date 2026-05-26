@@ -12,6 +12,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const root = document.documentElement;
+    root.dataset.themeChanging = "";
     if (state.theme === "system") root.removeAttribute("data-theme");
     else root.setAttribute("data-theme", state.theme);
     try {
@@ -19,6 +20,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore quota / private mode
     }
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        delete root.dataset.themeChanging;
+      });
+    });
+    return () => cancelAnimationFrame(id);
   }, [state.theme]);
 
   const effectiveMapping = useMemo(() => {
