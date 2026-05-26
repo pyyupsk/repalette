@@ -1,15 +1,18 @@
 import { useCallback, useEffect } from "react";
-import { AppProvider } from "./state/AppContext";
-import { useApp } from "./state/useApp";
+import { useHotkeys } from "react-hotkeys-hook";
+import { Canvas } from "./components/Canvas";
+import { Inspector } from "./components/Inspector";
+import { PaletteList } from "./components/PaletteList";
+import { PresetRail } from "./components/PresetRail";
+import { ReviewBand } from "./components/ReviewBand";
+import { StatusBar } from "./components/StatusBar";
+import { TopBar } from "./components/TopBar";
 import { extractPalette } from "./lib/palette";
 import { detectSource, renderRemapped } from "./lib/remap";
-import { TopBar } from "./components/TopBar";
-import { PresetRail } from "./components/PresetRail";
-import { Canvas } from "./components/Canvas";
-import { PaletteList } from "./components/PaletteList";
-import { Inspector } from "./components/Inspector";
-import { StatusBar } from "./components/StatusBar";
-import { ReviewBand } from "./components/ReviewBand";
+import { AppProvider } from "./state/AppContext";
+import { useApp } from "./state/useApp";
+
+const themeOrder = ["light", "dark", "system"] as const;
 
 function Shell() {
   const { image, palette, selectedHex, effectiveMapping, dispatch, theme } =
@@ -81,6 +84,45 @@ function Shell() {
     }, "image/png");
   }, [image, effectiveMapping]);
 
+  useHotkeys(
+    "mod+e",
+    (e) => {
+      e.preventDefault();
+      handleExport();
+    },
+    { enableOnFormTags: true },
+  );
+
+  useHotkeys("t", () => {
+    const idx = themeOrder.indexOf(theme);
+    dispatch({
+      type: "set-theme",
+      theme: themeOrder[(idx + 1) % themeOrder.length],
+    });
+  });
+
+  const cycleSwatch = useCallback(
+    (direction: 1 | -1) => {
+      if (!palette.length || !selectedHex) return;
+      const i = palette.findIndex((s) => s.hex === selectedHex);
+      const next =
+        direction === 1
+          ? Math.min(palette.length - 1, i + 1)
+          : Math.max(0, i - 1);
+      dispatch({ type: "select", hex: palette[next].hex });
+    },
+    [palette, selectedHex, dispatch],
+  );
+
+  useHotkeys("ArrowDown", (e) => {
+    e.preventDefault();
+    cycleSwatch(1);
+  });
+  useHotkeys("ArrowUp", (e) => {
+    e.preventDefault();
+    cycleSwatch(-1);
+  });
+
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {
       const item = Array.from(e.clipboardData?.items ?? []).find((i) =>
@@ -92,39 +134,6 @@ function Shell() {
     window.addEventListener("paste", onPaste);
     return () => window.removeEventListener("paste", onPaste);
   }, [handleFile]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const editing = target.matches("input,textarea,[contenteditable]");
-      const mod = e.metaKey || e.ctrlKey;
-
-      if (mod && e.key.toLowerCase() === "e") {
-        e.preventDefault();
-        handleExport();
-        return;
-      }
-      if (editing) return;
-      if (e.key === "t" && !mod) {
-        const order = ["light", "dark", "system"] as const;
-        const idx = order.indexOf(theme);
-        dispatch({ type: "set-theme", theme: order[(idx + 1) % order.length] });
-        return;
-      }
-      if (!palette.length || !selectedHex) return;
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault();
-        const i = palette.findIndex((s) => s.hex === selectedHex);
-        const next =
-          e.key === "ArrowDown"
-            ? Math.min(palette.length - 1, i + 1)
-            : Math.max(0, i - 1);
-        dispatch({ type: "select", hex: palette[next].hex });
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [palette, selectedHex, theme, handleExport, dispatch]);
 
   return (
     <div className="flex h-svh flex-col overflow-hidden">

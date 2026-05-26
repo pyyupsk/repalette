@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { IconCopy } from "@tabler/icons-react";
 import { useApp } from "../state/useApp";
 import { hexToRgb, isLight, rgbToHex } from "../lib/colors";
-import { IconCopy } from "./icons";
 
 const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
@@ -139,7 +139,7 @@ function InspectorBody({
                   aria-label="Copy hex"
                   title="Copy hex"
                 >
-                  <IconCopy size={12} />
+                  <IconCopy size={12} stroke={1.6} />
                 </button>
               </div>
             </div>

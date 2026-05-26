@@ -1,7 +1,7 @@
 import { useRef } from "react";
+import { IconDownload, IconRotate, IconUpload } from "@tabler/icons-react";
 import { useApp } from "../state/useApp";
 import { ThemeToggle } from "./ThemeToggle";
-import { IconDownload, IconRotate, IconUpload } from "./icons";
 
 type Props = {
   onFile: (file: File) => void;
@@ -55,7 +55,7 @@ export function TopBar({ onFile, onExport }: Props) {
           onClick={pickFile}
           className="flex h-7 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2.5 text-[12px] text-text transition-colors duration-150 hover:bg-raised"
         >
-          <IconUpload size={13} />
+          <IconUpload size={13} stroke={1.6} />
           Upload
         </button>
         {image && (
@@ -64,7 +64,7 @@ export function TopBar({ onFile, onExport }: Props) {
             onClick={() => dispatch({ type: "reset" })}
             className="flex h-7 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2.5 text-[12px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
           >
-            <IconRotate size={13} />
+            <IconRotate size={13} stroke={1.6} />
             Reset
           </button>
         )}
@@ -78,7 +78,7 @@ export function TopBar({ onFile, onExport }: Props) {
           className="flex h-7 items-center gap-1.5 rounded-md bg-accent px-3 text-[12px] font-medium text-text shadow-[inset_0_0_0_1px_oklch(70%_0.25_350)] transition-opacity duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
           style={{ color: "oklch(14% 0.01 350)" }}
         >
-          <IconDownload size={13} />
+          <IconDownload size={13} stroke={1.6} />
           Export
         </button>
       </div>

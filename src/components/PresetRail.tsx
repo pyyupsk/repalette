@@ -1,6 +1,7 @@
-import { useApp } from "../state/useApp";
-import { buildColorMap } from "../lib/remap";
+import { cn } from "../lib/cn";
 import { presets, type Preset } from "../lib/presets";
+import { buildColorMap } from "../lib/remap";
+import { useApp } from "../state/useApp";
 
 const slotPreview: Array<keyof Preset["colors"]> = [
   "base",
@@ -61,13 +62,10 @@ export function PresetRail() {
                   type="button"
                   onClick={() => handleSource(preset)}
                   disabled={!palette.length}
-                  className={[
-                    "flex h-7 items-center justify-between rounded px-2 text-[12px] transition-colors duration-150",
-                    active
-                      ? "bg-raised text-text"
-                      : "text-text-mid hover:bg-raised hover:text-text",
-                    "disabled:cursor-not-allowed disabled:opacity-40",
-                  ].join(" ")}
+                  className={cn(
+                    "flex h-7 items-center justify-between rounded px-2 text-[12px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text disabled:cursor-not-allowed disabled:opacity-40",
+                    active && "bg-raised text-text",
+                  )}
                 >
                   <span className="truncate">{preset.name}</span>
                   {active && (
@@ -96,16 +94,12 @@ export function PresetRail() {
                   type="button"
                   onClick={() => handleApply(preset)}
                   disabled={disabled}
-                  className={[
-                    "group flex flex-col gap-1 rounded border bg-bg px-2 py-1.5 text-left transition-colors duration-150",
-                    isPreview
-                      ? "border-accent"
-                      : "border-hairline hover:border-text-dim",
+                  className={cn(
+                    "group flex flex-col gap-1 rounded border border-hairline bg-bg px-2 py-1.5 text-left transition-colors duration-150 hover:border-text-dim",
+                    isPreview && "border-accent hover:border-accent",
                     disabled &&
                       "cursor-not-allowed opacity-40 hover:border-hairline",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
+                  )}
                 >
                   <div className="flex items-center justify-between">
                     <span className="truncate text-[12px] text-text">

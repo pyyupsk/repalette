@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { useApp } from "../state/useApp";
+import { cn } from "../lib/cn";
 import { isLight } from "../lib/colors";
+import { useApp } from "../state/useApp";
 
 const DEFAULT_TOP = 30;
 
@@ -51,10 +52,10 @@ export function PaletteList() {
                 role="option"
                 aria-selected={selected}
                 onClick={() => dispatch({ type: "select", hex: s.hex })}
-                className={[
-                  "group flex w-full items-center gap-2.5 border-b border-hairline px-3 py-1.5 text-left transition-colors duration-100",
-                  selected ? "bg-raised" : "hover:bg-raised",
-                ].join(" ")}
+                className={cn(
+                  "group flex w-full items-center gap-2.5 border-b border-hairline px-3 py-1.5 text-left transition-colors duration-100 hover:bg-raised",
+                  selected && "bg-raised",
+                )}
               >
                 <SwatchTile hex={s.hex} />
                 {target && target !== s.hex ? (

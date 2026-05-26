@@ -1,52 +1,40 @@
-import { useRef, useState } from "react";
-import { IconUpload } from "./icons";
+import { IconUpload } from "@tabler/icons-react";
+import { useDropzone } from "react-dropzone";
+import { cn } from "../lib/cn";
 
 type Props = {
   onFile: (file: File) => void;
   error: string | null;
 };
 
-const accepted = ["image/png", "image/jpeg", "image/webp"];
+const accept = {
+  "image/png": [".png"],
+  "image/jpeg": [".jpg", ".jpeg"],
+  "image/webp": [".webp"],
+};
 
 export function Dropzone({ onFile, error }: Props) {
-  const [over, setOver] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setOver(false);
-    const file = e.dataTransfer.files?.[0];
-    if (!file) return;
-    if (!accepted.includes(file.type)) return;
-    onFile(file);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) onFile(f);
-    e.target.value = "";
-  };
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
+    accept,
+    multiple: false,
+    noClick: true,
+    noKeyboard: true,
+    onDrop: (files) => {
+      const file = files[0];
+      if (file) onFile(file);
+    },
+  });
 
   return (
     <div
-      onDrop={handleDrop}
-      onDragOver={(e) => {
-        e.preventDefault();
-        setOver(true);
-      }}
-      onDragLeave={() => setOver(false)}
-      className={[
-        "relative grid h-full w-full place-items-center px-8 transition-colors duration-200",
-        over ? "bg-raised" : "bg-bg",
-      ].join(" ")}
+      {...getRootProps({
+        className: cn(
+          "relative grid h-full w-full place-items-center px-8 transition-colors duration-200",
+          isDragActive ? "bg-raised" : "bg-bg",
+        ),
+      })}
     >
-      <input
-        ref={fileRef}
-        type="file"
-        accept={accepted.join(",")}
-        onChange={handleChange}
-        className="hidden"
-      />
+      <input {...getInputProps()} />
       <div className="flex max-w-md flex-col items-center gap-5 text-center">
         <h2 className="font-display text-[clamp(1.8rem,3vw,2.5rem)] font-medium leading-[1.05] tracking-tight text-text">
           Drop an image. Or paste.
@@ -56,11 +44,11 @@ export function Dropzone({ onFile, error }: Props) {
         </p>
         <button
           type="button"
-          onClick={() => fileRef.current?.click()}
+          onClick={open}
           className="mt-1 flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-[13px] font-medium transition-opacity duration-150 hover:opacity-90"
           style={{ color: "oklch(14% 0.01 350)" }}
         >
-          <IconUpload size={14} />
+          <IconUpload size={14} stroke={1.6} />
           Choose file
         </button>
         {error && (
