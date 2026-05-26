@@ -1,3 +1,7 @@
 export default function App() {
-  return <h1>Hello, World!</h1>;
+  return (
+    <div className="grid min-h-svh place-items-center">
+      <h1 className="text-4xl font-bold">Hello, World!</h1>
+    </div>
+  );
 }
