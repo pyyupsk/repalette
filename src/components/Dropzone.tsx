@@ -69,7 +69,7 @@ export function Dropzone({ onFile, error }: Props) {
       </div>
       <p
         aria-hidden
-        className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.1em] text-text-dim"
+        className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-widest text-text-dim"
       >
         ⌘V to paste
       </p>

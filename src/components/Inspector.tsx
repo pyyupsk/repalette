@@ -102,7 +102,7 @@ function InspectorBody({
       <div className="flex flex-col gap-4 overflow-y-auto p-3">
         <div className="flex items-stretch gap-3">
           <div
-            className="h-20 w-20 flex-shrink-0 rounded"
+            className="h-20 w-20 shrink-0 rounded"
             style={{
               background: currentTarget,
               boxShadow: isLight(currentTarget)
@@ -205,7 +205,7 @@ function ChannelRow({
         max={255}
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value, 10))}
-        className="flex-1 accent-[oklch(70%_0.25_350)]"
+        className="flex-1 accent-accent"
         aria-label={`${label} channel`}
       />
       <input
