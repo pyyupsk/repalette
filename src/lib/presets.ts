@@ -162,4 +162,3 @@ export const presets: Preset[] = [
   gruvboxDark,
   nord,
 ];
-export const presetById = new Map(presets.map((p) => [p.id, p]));

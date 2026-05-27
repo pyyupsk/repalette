@@ -6,7 +6,7 @@ import { defaultRemapOptions, type RemapOptions } from "../lib/remap";
 
 export type Theme = "light" | "dark" | "system";
 
-export type ImageState = {
+type ImageState = {
   file: File;
   url: string;
   bitmap: ImageBitmap;
@@ -15,9 +15,9 @@ export type ImageState = {
   data: ImageData;
 };
 
-export type Status = "idle" | "decoding" | "ready" | "error";
+type Status = "idle" | "decoding" | "ready" | "error";
 
-export type AppState = {
+type AppState = {
   theme: Theme;
   image: ImageState | null;
   palette: Swatch[];
