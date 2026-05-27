@@ -5,9 +5,9 @@ import { Popover } from "@base-ui/react/popover";
 import { Slider } from "@base-ui/react/slider";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
-import { hexToRgb, isLight, rgbToHex } from "../../lib/colors";
-import { useEffectiveMapping, useStore } from "../../state/store";
-import { SectionLabel } from "../ui/section-label";
+import { hexToRgb, isLight, rgbToHex } from "@/lib/colors";
+import { useEffectiveMapping, useStore } from "@/state/store";
+import { SectionLabel } from "@/components/ui/section-label";
 
 const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { IconDownload, IconRotate, IconUpload } from "@tabler/icons-react";
-import { useStore } from "../../state/store";
-import { Button } from "../ui/button";
+import { useStore } from "@/state/store";
+import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 
 type Props = {
@@ -52,10 +52,7 @@ export function TopBar({ onFile, onExport }: Props) {
           onChange={handleFileChange}
           className="hidden"
         />
-        <Button
-          onClick={pickFile}
-          icon={<IconUpload size={13} stroke={1.6} />}
-        >
+        <Button onClick={pickFile} icon={<IconUpload size={13} stroke={1.6} />}>
           Upload
         </Button>
         {image && (

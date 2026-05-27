@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { create } from "zustand";
-import type { Swatch } from "../lib/colors";
-import type { Preset } from "../lib/presets";
-import { defaultRemapOptions, type RemapOptions } from "../lib/remap";
+import type { Swatch } from "@/lib/colors";
+import type { Preset } from "@/lib/presets";
+import { defaultRemapOptions, type RemapOptions } from "@/lib/remap";
 
 export type Theme = "light" | "dark" | "system";
 

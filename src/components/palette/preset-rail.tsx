@@ -1,8 +1,8 @@
-import { cn } from "../../lib/cn";
-import { type HueBucket, type Preset, presets } from "../../lib/presets";
-import { buildColorMap } from "../../lib/remap";
-import { useStore } from "../../state/store";
-import { SectionLabel } from "../ui/section-label";
+import { cn } from "@/lib/cn";
+import { type HueBucket, type Preset, presets } from "@/lib/presets";
+import { buildColorMap } from "@/lib/remap";
+import { useStore } from "@/state/store";
+import { SectionLabel } from "@/components/ui/section-label";
 
 const ACCENT_ORDER: HueBucket[] = [
   "red",

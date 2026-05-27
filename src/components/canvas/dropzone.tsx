@@ -1,6 +1,6 @@
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
-import { cn } from "../../lib/cn";
+import { cn } from "@/lib/cn";
 
 type Props = {
   onFile: (file: File) => void;

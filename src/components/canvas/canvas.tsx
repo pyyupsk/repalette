@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { renderRemapped } from "../../lib/remap";
-import { useEffectiveMapping, useStore } from "../../state/store";
+import { renderRemapped } from "@/lib/remap";
+import { useEffectiveMapping, useStore } from "@/state/store";
 import { Dropzone } from "./dropzone";
 
 type Props = {

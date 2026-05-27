@@ -1,4 +1,4 @@
-import { useStore } from "../../state/store";
+import { useStore } from "@/state/store";
 
 export function StatusBar() {
   const image = useStore((s) => s.image);

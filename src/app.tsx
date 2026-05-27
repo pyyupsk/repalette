@@ -1,16 +1,16 @@
 import { useCallback, useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Toaster, toast } from "sonner";
-import { Canvas } from "./components/canvas/canvas";
-import { Inspector } from "./components/palette/inspector";
-import { PaletteList } from "./components/palette/palette-list";
-import { PresetRail } from "./components/palette/preset-rail";
-import { ReviewBand } from "./components/layout/review-band";
-import { StatusBar } from "./components/layout/status-bar";
-import { TopBar } from "./components/layout/top-bar";
-import { extractPalette } from "./lib/palette";
-import { detectSource, renderRemapped } from "./lib/remap";
-import { useEffectiveMapping, useStore } from "./state/store";
+import { Canvas } from "@/components/canvas/canvas";
+import { ReviewBand } from "@/components/layout/review-band";
+import { StatusBar } from "@/components/layout/status-bar";
+import { TopBar } from "@/components/layout/top-bar";
+import { Inspector } from "@/components/palette/inspector";
+import { PaletteList } from "@/components/palette/palette-list";
+import { PresetRail } from "@/components/palette/preset-rail";
+import { extractPalette } from "@/lib/palette";
+import { detectSource, renderRemapped } from "@/lib/remap";
+import { useEffectiveMapping, useStore } from "@/state/store";
 
 const themeOrder = ["light", "dark", "system"] as const;
 
