@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { IconCopy } from "@tabler/icons-react";
+import { NumberField } from "@base-ui/react/number-field";
+import { Popover } from "@base-ui/react/popover";
 import { Slider } from "@base-ui/react/slider";
+import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 import { hexToRgb, isLight, rgbToHex } from "../lib/colors";
 import { useEffectiveMapping, useStore } from "../state/store";
@@ -34,7 +37,7 @@ export function Inspector() {
 
   return (
     <InspectorBody
-      key={`${selectedHex}|${currentTarget}`}
+      key={selectedHex}
       hex={selectedHex}
       currentTarget={currentTarget}
       count={swatch.count}
@@ -114,16 +117,26 @@ function InspectorBody({
 
       <div className="flex flex-col gap-4 overflow-y-auto p-3">
         <div className="flex items-stretch gap-3">
-          <div
-            className="h-20 w-20 shrink-0 rounded"
-            style={{
-              background: currentTarget,
-              boxShadow: isLight(currentTarget)
-                ? "inset 0 0 0 1px oklch(0% 0 0 / 0.15)"
-                : "inset 0 0 0 1px oklch(100% 0 0 / 0.1)",
-            }}
-            aria-label={`Color preview ${currentTarget}`}
-          />
+          <Popover.Root>
+            <Popover.Trigger
+              className="h-20 w-20 shrink-0 cursor-pointer rounded outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+              style={{
+                background: currentTarget,
+                boxShadow: isLight(currentTarget)
+                  ? "inset 0 0 0 1px oklch(0% 0 0 / 0.15)"
+                  : "inset 0 0 0 1px oklch(100% 0 0 / 0.1)",
+              }}
+              aria-label={`Pick replacement color for ${hex}`}
+              title="Pick color"
+            />
+            <Popover.Portal>
+              <Popover.Positioner sideOffset={8} side="bottom" align="start">
+                <Popover.Popup className="rounded-md border border-hairline bg-panel p-2 shadow-[0_8px_24px_oklch(0%_0_0/0.35)] outline-none">
+                  <HexColorPicker color={currentTarget} onChange={writeHex} />
+                </Popover.Popup>
+              </Popover.Positioner>
+            </Popover.Portal>
+          </Popover.Root>
           <div className="flex flex-1 flex-col justify-between py-0.5">
             <div className="flex flex-col gap-0.5">
               <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
@@ -228,14 +241,16 @@ function ChannelRow({
           </Slider.Track>
         </Slider.Control>
       </Slider.Root>
-      <input
-        type="number"
+      <NumberField.Root
+        value={value}
+        onValueChange={(v) => onChange(v ?? 0)}
         min={0}
         max={255}
-        value={value}
-        onChange={(e) => onChange(parseInt(e.target.value || "0", 10))}
-        className="w-12 rounded border border-hairline bg-bg px-1.5 py-0.5 text-right font-mono text-[11px] tabular-nums text-text outline-none focus:border-accent"
-      />
+        step={1}
+        aria-label={`${label} value`}
+      >
+        <NumberField.Input className="w-12 rounded border border-hairline bg-bg px-1.5 py-0.5 text-right font-mono text-[11px] tabular-nums text-text outline-none focus:border-accent" />
+      </NumberField.Root>
     </div>
   );
 }
