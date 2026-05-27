@@ -1,6 +1,6 @@
 import { IconCheck, IconRotate } from "@tabler/icons-react";
-import { useStore } from "../state/store";
-import { Button } from "./ui/button";
+import { useStore } from "../../state/store";
+import { Button } from "../ui/button";
 
 export function ReviewBand() {
   const previewPreset = useStore((s) => s.previewPreset);

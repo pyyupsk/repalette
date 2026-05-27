@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "../lib/cn";
-import { isLight } from "../lib/colors";
-import { useEffectiveMapping, useStore } from "../state/store";
-import { SectionLabel } from "./ui/section-label";
+import { cn } from "../../lib/cn";
+import { isLight } from "../../lib/colors";
+import { useEffectiveMapping, useStore } from "../../state/store";
+import { SectionLabel } from "../ui/section-label";
 
 const ROW_HEIGHT = 32;
 

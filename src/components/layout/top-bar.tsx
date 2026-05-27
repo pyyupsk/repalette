@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { IconDownload, IconRotate, IconUpload } from "@tabler/icons-react";
-import { useStore } from "../state/store";
-import { ThemeToggle } from "./ThemeToggle";
-import { Button } from "./ui/button";
+import { useStore } from "../../state/store";
+import { Button } from "../ui/button";
+import { ThemeToggle } from "./theme-toggle";
 
 type Props = {
   onFile: (file: File) => void;
