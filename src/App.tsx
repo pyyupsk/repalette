@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Toaster, toast } from "sonner";
 import { Canvas } from "./components/Canvas";
 import { Inspector } from "./components/Inspector";
 import { PaletteList } from "./components/PaletteList";
@@ -9,55 +10,71 @@ import { StatusBar } from "./components/StatusBar";
 import { TopBar } from "./components/TopBar";
 import { extractPalette } from "./lib/palette";
 import { detectSource, renderRemapped } from "./lib/remap";
-import { AppProvider } from "./state/AppContext";
-import { useApp } from "./state/useApp";
+import { useEffectiveMapping, useStore } from "./state/store";
 
 const themeOrder = ["light", "dark", "system"] as const;
 
-function Shell() {
-  const { image, palette, selectedHex, effectiveMapping, dispatch, theme } =
-    useApp();
+export default function App() {
+  const image = useStore((s) => s.image);
+  const palette = useStore((s) => s.palette);
+  const selectedHex = useStore((s) => s.selectedHex);
+  const theme = useStore((s) => s.theme);
+  const effectiveMapping = useEffectiveMapping();
 
-  const handleFile = useCallback(
-    async (file: File) => {
-      dispatch({ type: "begin-decode" });
-      try {
-        const url = URL.createObjectURL(file);
-        const bitmap = await createImageBitmap(file);
-        const result = extractPalette(bitmap);
-        const c = document.createElement("canvas");
-        c.width = result.width;
-        c.height = result.height;
-        const ctx = c.getContext("2d");
-        if (!ctx) throw new Error("no 2d context");
-        ctx.drawImage(bitmap, 0, 0);
-        const data = ctx.getImageData(0, 0, result.width, result.height);
-        const source = detectSource(result.swatches);
-        dispatch({
-          type: "set-image",
-          image: {
-            file,
-            url,
-            bitmap,
-            width: result.width,
-            height: result.height,
-            data,
-          },
-          palette: result.swatches,
-          source,
-        });
-      } catch (err) {
-        dispatch({
-          type: "decode-failed",
-          error:
-            err instanceof Error
-              ? err.message
-              : "decode failed · file may be corrupt",
-        });
-      }
-    },
-    [dispatch],
-  );
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.themeChanging = "";
+    if (theme === "system") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // ignore quota / private mode
+    }
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        delete root.dataset.themeChanging;
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [theme]);
+
+  const handleFile = useCallback(async (file: File) => {
+    const { beginDecode, setImage, decodeFailed } = useStore.getState();
+    beginDecode();
+    try {
+      const url = URL.createObjectURL(file);
+      const bitmap = await createImageBitmap(file);
+      const result = extractPalette(bitmap);
+      const c = document.createElement("canvas");
+      c.width = result.width;
+      c.height = result.height;
+      const ctx = c.getContext("2d");
+      if (!ctx) throw new Error("no 2d context");
+      ctx.drawImage(bitmap, 0, 0);
+      const data = ctx.getImageData(0, 0, result.width, result.height);
+      const source = detectSource(result.swatches);
+      setImage(
+        {
+          file,
+          url,
+          bitmap,
+          width: result.width,
+          height: result.height,
+          data,
+        },
+        result.swatches,
+        source,
+      );
+    } catch (err) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "decode failed · file may be corrupt";
+      decodeFailed(msg);
+      toast.error(msg);
+    }
+  }, []);
 
   const handleExport = useCallback(() => {
     if (!image) return;
@@ -76,11 +93,13 @@ function Shell() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = image.file.name.replace(/(\.[^.]+)?$/, ".repalette.png");
+      const name = image.file.name.replace(/(\.[^.]+)?$/, ".repalette.png");
+      a.download = name;
       document.body.appendChild(a);
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      toast.success(`exported ${name}`);
     }, "image/png");
   }, [image, effectiveMapping]);
 
@@ -95,10 +114,7 @@ function Shell() {
 
   useHotkeys("t", () => {
     const idx = themeOrder.indexOf(theme);
-    dispatch({
-      type: "set-theme",
-      theme: themeOrder[(idx + 1) % themeOrder.length],
-    });
+    useStore.getState().setTheme(themeOrder[(idx + 1) % themeOrder.length]);
   });
 
   const cycleSwatch = useCallback(
@@ -109,9 +125,9 @@ function Shell() {
         direction === 1
           ? Math.min(palette.length - 1, i + 1)
           : Math.max(0, i - 1);
-      dispatch({ type: "select", hex: palette[next].hex });
+      useStore.getState().select(palette[next].hex);
     },
-    [palette, selectedHex, dispatch],
+    [palette, selectedHex],
   );
 
   useHotkeys("ArrowDown", (e) => {
@@ -148,14 +164,18 @@ function Shell() {
         </aside>
       </div>
       <StatusBar />
+      <Toaster
+        theme={theme}
+        position="bottom-right"
+        toastOptions={{
+          className: "font-mono",
+          style: {
+            background: "var(--panel)",
+            color: "var(--text)",
+            border: "1px solid var(--hairline)",
+          },
+        }}
+      />
     </div>
-  );
-}
-
-export default function App() {
-  return (
-    <AppProvider>
-      <Shell />
-    </AppProvider>
   );
 }

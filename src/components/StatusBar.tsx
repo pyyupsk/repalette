@@ -1,8 +1,13 @@
-import { useApp } from "../state/useApp";
+import { useStore } from "../state/store";
 
 export function StatusBar() {
-  const { image, palette, mapping, previewPreset, sourcePreset, status } =
-    useApp();
+  const image = useStore((s) => s.image);
+  const palette = useStore((s) => s.palette);
+  const mapping = useStore((s) => s.mapping);
+  const previewPreset = useStore((s) => s.previewPreset);
+  const sourcePreset = useStore((s) => s.sourcePreset);
+  const status = useStore((s) => s.status);
+
   if (!image) return null;
 
   return (

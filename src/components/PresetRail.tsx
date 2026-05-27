@@ -1,7 +1,7 @@
 import { cn } from "../lib/cn";
 import { type HueBucket, type Preset, presets } from "../lib/presets";
 import { buildColorMap } from "../lib/remap";
-import { useApp } from "../state/useApp";
+import { useStore } from "../state/store";
 
 const ACCENT_ORDER: HueBucket[] = [
   "red",
@@ -28,12 +28,17 @@ const previewSwatches = (preset: Preset): string[] => {
 };
 
 export function PresetRail() {
-  const { palette, sourcePreset, previewPreset, dispatch } = useApp();
+  const palette = useStore((s) => s.palette);
+  const sourcePreset = useStore((s) => s.sourcePreset);
+  const previewPreset = useStore((s) => s.previewPreset);
+  const setSource = useStore((s) => s.setSource);
+  const preview = useStore((s) => s.preview);
+  const revertPreview = useStore((s) => s.revertPreview);
 
   const handleApply = (preset: Preset) => {
     if (!sourcePreset) return;
     if (preset.id === previewPreset?.id) {
-      dispatch({ type: "revert-preview" });
+      revertPreview();
       return;
     }
     const mapping = buildColorMap(
@@ -41,18 +46,18 @@ export function PresetRail() {
       sourcePreset,
       preset,
     );
-    dispatch({ type: "preview", preset, mapping });
+    preview(preset, mapping);
   };
 
   const handleSource = (preset: Preset) => {
-    dispatch({ type: "set-source", preset });
+    setSource(preset);
     if (previewPreset) {
       const mapping = buildColorMap(
         palette.map((s) => s.hex),
         preset,
         previewPreset,
       );
-      dispatch({ type: "preview", preset: previewPreset, mapping });
+      preview(previewPreset, mapping);
     }
   };
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { useApp } from "../state/useApp";
 import { renderRemapped } from "../lib/remap";
+import { useEffectiveMapping, useStore } from "../state/store";
 import { Dropzone } from "./Dropzone";
 
 type Props = {
@@ -8,7 +8,10 @@ type Props = {
 };
 
 export function Canvas({ onFile }: Props) {
-  const { image, status, error, effectiveMapping } = useApp();
+  const image = useStore((s) => s.image);
+  const status = useStore((s) => s.status);
+  const error = useStore((s) => s.error);
+  const effectiveMapping = useEffectiveMapping();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

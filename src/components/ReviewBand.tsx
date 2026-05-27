@@ -1,8 +1,13 @@
 import { IconCheck, IconRotate } from "@tabler/icons-react";
-import { useApp } from "../state/useApp";
+import { useStore } from "../state/store";
 
 export function ReviewBand() {
-  const { previewPreset, previewMapping, sourcePreset, dispatch } = useApp();
+  const previewPreset = useStore((s) => s.previewPreset);
+  const previewMapping = useStore((s) => s.previewMapping);
+  const sourcePreset = useStore((s) => s.sourcePreset);
+  const revertPreview = useStore((s) => s.revertPreview);
+  const commitPreview = useStore((s) => s.commitPreview);
+
   if (!previewPreset || !previewMapping || !sourcePreset) return null;
 
   let changed = 0;
@@ -27,7 +32,7 @@ export function ReviewBand() {
       <div className="flex items-center gap-2">
         <button
           type="button"
-          onClick={() => dispatch({ type: "revert-preview" })}
+          onClick={revertPreview}
           className="flex h-6 items-center gap-1.5 rounded border border-hairline bg-panel px-2 font-mono text-[11px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
         >
           <IconRotate size={11} stroke={1.6} />
@@ -35,7 +40,7 @@ export function ReviewBand() {
         </button>
         <button
           type="button"
-          onClick={() => dispatch({ type: "commit-preview" })}
+          onClick={commitPreview}
           className="flex h-6 items-center gap-1.5 rounded bg-accent px-2 font-mono text-[11px] font-medium transition-opacity duration-150 hover:opacity-90"
           style={{ color: "oklch(14% 0.01 350)" }}
         >

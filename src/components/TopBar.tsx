@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { IconDownload, IconRotate, IconUpload } from "@tabler/icons-react";
-import { useApp } from "../state/useApp";
+import { useStore } from "../state/store";
 import { ThemeToggle } from "./ThemeToggle";
 
 type Props = {
@@ -9,7 +9,8 @@ type Props = {
 };
 
 export function TopBar({ onFile, onExport }: Props) {
-  const { image, dispatch } = useApp();
+  const image = useStore((s) => s.image);
+  const reset = useStore((s) => s.reset);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const pickFile = () => fileRef.current?.click();
@@ -61,7 +62,7 @@ export function TopBar({ onFile, onExport }: Props) {
         {image && (
           <button
             type="button"
-            onClick={() => dispatch({ type: "reset" })}
+            onClick={reset}
             className="flex h-7 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2.5 text-[12px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
           >
             <IconRotate size={13} stroke={1.6} />

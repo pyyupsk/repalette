@@ -1,19 +1,25 @@
-import { useMemo, useState } from "react";
+import { useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "../lib/cn";
 import { isLight } from "../lib/colors";
-import { useApp } from "../state/useApp";
+import { useEffectiveMapping, useStore } from "../state/store";
 
-const DEFAULT_TOP = 30;
+const ROW_HEIGHT = 32;
 
 export function PaletteList() {
-  const { palette, selectedHex, effectiveMapping, mapping, dispatch } =
-    useApp();
-  const [showAll, setShowAll] = useState(false);
+  const palette = useStore((s) => s.palette);
+  const selectedHex = useStore((s) => s.selectedHex);
+  const mapping = useStore((s) => s.mapping);
+  const effectiveMapping = useEffectiveMapping();
+  const select = useStore((s) => s.select);
 
-  const list = useMemo(
-    () => (showAll ? palette : palette.slice(0, DEFAULT_TOP)),
-    [palette, showAll],
-  );
+  const parentRef = useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: palette.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => ROW_HEIGHT,
+    overscan: 8,
+  });
 
   if (!palette.length) {
     return (
@@ -36,24 +42,41 @@ export function PaletteList() {
         </div>
       </div>
 
-      <ul
+      <div
+        ref={parentRef}
         className="flex-1 overflow-y-auto"
         role="listbox"
         aria-label="Palette"
       >
-        {list.map((s) => {
-          const selected = s.hex === selectedHex;
-          const target = effectiveMapping.get(s.hex);
-          const overridden = mapping.has(s.hex);
-          return (
-            <li key={s.hex}>
+        <div
+          style={{
+            height: rowVirtualizer.getTotalSize(),
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((vi) => {
+            const s = palette[vi.index];
+            const selected = s.hex === selectedHex;
+            const target = effectiveMapping.get(s.hex);
+            const overridden = mapping.has(s.hex);
+            return (
               <button
+                key={s.hex}
                 type="button"
                 role="option"
                 aria-selected={selected}
-                onClick={() => dispatch({ type: "select", hex: s.hex })}
+                onClick={() => select(s.hex)}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: vi.size,
+                  transform: `translateY(${vi.start}px)`,
+                }}
                 className={cn(
-                  "group flex w-full items-center gap-2.5 border-b border-hairline px-3 py-1.5 text-left transition-colors duration-100 hover:bg-raised",
+                  "flex items-center gap-2.5 border-b border-hairline px-3 text-left transition-colors duration-100 hover:bg-raised",
                   selected && "bg-raised",
                 )}
               >
@@ -86,20 +109,10 @@ export function PaletteList() {
                   </span>
                 )}
               </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      {palette.length > DEFAULT_TOP && (
-        <button
-          type="button"
-          onClick={() => setShowAll((v) => !v)}
-          className="border-t border-hairline bg-panel py-2 font-mono text-[11px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
-        >
-          {showAll ? `show top ${DEFAULT_TOP}` : `show all ${palette.length}`}
-        </button>
-      )}
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

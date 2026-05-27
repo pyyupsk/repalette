@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { IconCopy } from "@tabler/icons-react";
-import { useApp } from "../state/useApp";
+import { Slider } from "@base-ui/react/slider";
+import { toast } from "sonner";
 import { hexToRgb, isLight, rgbToHex } from "../lib/colors";
+import { useEffectiveMapping, useStore } from "../state/store";
 
 const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
 export function Inspector() {
-  const { selectedHex, palette, mapping, effectiveMapping, dispatch } =
-    useApp();
+  const selectedHex = useStore((s) => s.selectedHex);
+  const palette = useStore((s) => s.palette);
+  const mapping = useStore((s) => s.mapping);
+  const effectiveMapping = useEffectiveMapping();
+  const edit = useStore((s) => s.edit);
+
   const swatch = palette.find((s) => s.hex === selectedHex);
   const currentTarget = selectedHex
     ? (effectiveMapping.get(selectedHex) ?? selectedHex)
@@ -34,7 +40,7 @@ export function Inspector() {
       count={swatch.count}
       pct={swatch.pct}
       edited={mapping.has(selectedHex)}
-      dispatch={dispatch}
+      edit={edit}
     />
   );
 }
@@ -45,7 +51,7 @@ type BodyProps = {
   count: number;
   pct: number;
   edited: boolean;
-  dispatch: ReturnType<typeof useApp>["dispatch"];
+  edit: (from: string, to: string | null) => void;
 };
 
 function InspectorBody({
@@ -54,7 +60,7 @@ function InspectorBody({
   count,
   pct,
   edited,
-  dispatch,
+  edit,
 }: BodyProps) {
   const [r, g, b] = hexToRgb(currentTarget);
   const [draft, setDraft] = useState(currentTarget.replace(/^#/, ""));
@@ -63,7 +69,7 @@ function InspectorBody({
     setDraft(raw);
     const clean = raw.replace(/^#/, "");
     if (clean.length === 6 && isValidHex(clean)) {
-      dispatch({ type: "edit", from: hex, to: `#${clean.toLowerCase()}` });
+      edit(hex, `#${clean.toLowerCase()}`);
     }
   };
 
@@ -73,15 +79,22 @@ function InspectorBody({
     triplet[channel] = v;
     const next = rgbToHex(triplet);
     setDraft(next.replace(/^#/, ""));
-    dispatch({ type: "edit", from: hex, to: next });
+    edit(hex, next);
   };
 
   const reset = () => {
     setDraft(hex.replace(/^#/, ""));
-    dispatch({ type: "edit", from: hex, to: null });
+    edit(hex, null);
   };
 
-  const copy = () => navigator.clipboard?.writeText(currentTarget);
+  const copy = async () => {
+    try {
+      await navigator.clipboard?.writeText(currentTarget);
+      toast.success(`copied ${currentTarget}`);
+    } catch {
+      toast.error("clipboard blocked");
+    }
+  };
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden border-t border-hairline bg-panel">
@@ -146,7 +159,7 @@ function InspectorBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2.5">
           <ChannelRow
             label="R"
             value={r}
@@ -199,15 +212,22 @@ function ChannelRow({
   return (
     <div className="flex items-center gap-3">
       <span className="w-3 font-mono text-[11px] text-text-mid">{label}</span>
-      <input
-        type="range"
+      <Slider.Root
+        value={value}
+        onValueChange={(v) => onChange(typeof v === "number" ? v : v[0])}
         min={0}
         max={255}
-        value={value}
-        onChange={(e) => onChange(parseInt(e.target.value, 10))}
-        className="flex-1 accent-accent"
+        step={1}
+        className="flex-1"
         aria-label={`${label} channel`}
-      />
+      >
+        <Slider.Control className="relative flex h-4 w-full touch-none items-center select-none">
+          <Slider.Track className="relative h-1 grow rounded-full bg-hairline">
+            <Slider.Indicator className="absolute h-full rounded-full bg-accent" />
+            <Slider.Thumb className="block h-3 w-3 -translate-y-1/2 rounded-full bg-accent shadow-[0_1px_2px_oklch(15%_0.006_350/0.4)] outline-none focus-visible:ring-2 focus-visible:ring-accent-ring" />
+          </Slider.Track>
+        </Slider.Control>
+      </Slider.Root>
       <input
         type="number"
         min={0}

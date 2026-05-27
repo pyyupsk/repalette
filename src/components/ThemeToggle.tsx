@@ -1,12 +1,12 @@
 import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { cn } from "../lib/cn";
-import { useApp } from "../state/useApp";
-import type { Theme } from "../state/context";
+import { type Theme, useStore } from "../state/store";
 
 const order: Theme[] = ["light", "dark", "system"];
 
 export function ThemeToggle() {
-  const { theme, dispatch } = useApp();
+  const theme = useStore((s) => s.theme);
+  const setTheme = useStore((s) => s.setTheme);
 
   return (
     <div
@@ -24,7 +24,7 @@ export function ThemeToggle() {
             type="button"
             role="radio"
             aria-checked={active}
-            onClick={() => dispatch({ type: "set-theme", theme: t })}
+            onClick={() => setTheme(t)}
             className={cn(
               "grid h-6 w-6 place-items-center rounded text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text",
               active && "bg-raised text-text",
