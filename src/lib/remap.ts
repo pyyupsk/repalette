@@ -1,5 +1,5 @@
 import { converter } from "culori";
-import { hexToRgb, type Swatch, toHex } from "./colors";
+import { clampByte, hexToRgb, type Swatch, toHex } from "./colors";
 import { type HueBucket, type Preset, presets } from "./presets";
 
 const toOklch = converter("oklch");
@@ -34,7 +34,6 @@ const HUE_RANGES: { name: HueBucket; ranges: [number, number][] }[] = [
 ];
 
 const CHROMA_THRESHOLD = 0.08;
-const clamp = (v: number) => (v < 0 ? 0 : v > 255 ? 255 : v) | 0;
 
 const bucketForHue = (h: number | undefined): HueBucket => {
   if (h === undefined) return "red";
@@ -166,9 +165,9 @@ export const buildColorMap = (
     const [mr, mg, mb] = hexToRgb(cls.matchHex);
     const [tr, tg, tb] = hexToRgb(targetHex);
     const [r, g, b] = hexToRgb(hex);
-    let or = clamp(tr + (r - mr));
-    let og = clamp(tg + (g - mg));
-    let ob = clamp(tb + (b - mb));
+    let or = clampByte(tr + (r - mr));
+    let og = clampByte(tg + (g - mg));
+    let ob = clampByte(tb + (b - mb));
 
     if (cls.kind === "accent") {
       const lum = (0.299 * or + 0.587 * og + 0.114 * ob) / 255;
@@ -182,7 +181,7 @@ export const buildColorMap = (
       ob = ob * (1 - w) + baseRgb[2] * w;
     }
 
-    out.set(hex, `#${toHex(clamp(or))}${toHex(clamp(og))}${toHex(clamp(ob))}`);
+    out.set(hex, `#${toHex(clampByte(or))}${toHex(clampByte(og))}${toHex(clampByte(ob))}`);
   }
   return out;
 };

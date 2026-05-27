@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "@/lib/cn";
-import { isLight } from "@/lib/colors";
+import { cn } from "@/utils/cn";
+import { isLight, stripHash } from "@/lib/colors";
 import { useEffectiveMapping, useStore } from "@/state/store";
 import { SectionLabel } from "@/components/ui/section-label";
 
@@ -83,19 +83,19 @@ export function PaletteList() {
                 {target && target !== s.hex ? (
                   <>
                     <span className="font-mono text-[11px] text-text-mid line-through decoration-text-dim">
-                      {s.hex.replace(/^#/, "")}
+                      {stripHash(s.hex)}
                     </span>
                     <span className="font-mono text-[10px] text-text-dim">
                       →
                     </span>
                     <SwatchTile hex={target} small />
                     <span className="font-mono text-[11px] text-text">
-                      {target.replace(/^#/, "")}
+                      {stripHash(target)}
                     </span>
                   </>
                 ) : (
                   <span className="font-mono text-[11px] text-text">
-                    {s.hex.replace(/^#/, "")}
+                    {stripHash(s.hex)}
                   </span>
                 )}
                 <span className="flex-1" />

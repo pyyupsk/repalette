@@ -5,11 +5,16 @@ import { Popover } from "@base-ui/react/popover";
 import { Slider } from "@base-ui/react/slider";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
-import { hexToRgb, isLight, rgbToHex } from "@/lib/colors";
+import {
+  clampByte,
+  hexToRgb,
+  isLight,
+  isValidHex,
+  rgbToHex,
+  stripHash,
+} from "@/lib/colors";
 import { useEffectiveMapping, useStore } from "@/state/store";
 import { SectionLabel } from "@/components/ui/section-label";
-
-const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
 export function Inspector() {
   const selectedHex = useStore((s) => s.selectedHex);
@@ -65,27 +70,26 @@ function InspectorBody({
   edit,
 }: BodyProps) {
   const [r, g, b] = hexToRgb(currentTarget);
-  const [draft, setDraft] = useState(currentTarget.replace(/^#/, ""));
+  const [draft, setDraft] = useState(stripHash(currentTarget));
 
   const writeHex = (raw: string) => {
     setDraft(raw);
-    const clean = raw.replace(/^#/, "");
+    const clean = stripHash(raw);
     if (clean.length === 6 && isValidHex(clean)) {
       edit(hex, `#${clean.toLowerCase()}`);
     }
   };
 
   const writeChannel = (channel: 0 | 1 | 2, value: number) => {
-    const v = Math.max(0, Math.min(255, value | 0));
     const triplet: [number, number, number] = [r, g, b];
-    triplet[channel] = v;
+    triplet[channel] = clampByte(value);
     const next = rgbToHex(triplet);
-    setDraft(next.replace(/^#/, ""));
+    setDraft(stripHash(next));
     edit(hex, next);
   };
 
   const reset = () => {
-    setDraft(hex.replace(/^#/, ""));
+    setDraft(stripHash(hex));
     edit(hex, null);
   };
 
@@ -138,7 +142,7 @@ function InspectorBody({
             <div className="flex flex-col gap-0.5">
               <SectionLabel>Source</SectionLabel>
               <div className="flex items-center gap-2 font-mono text-[13px] text-text-mid">
-                {hex.replace(/^#/, "")}
+                {stripHash(hex)}
               </div>
             </div>
             <div className="flex flex-col gap-0.5">
