@@ -88,7 +88,21 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <noscript>
+        <h1>Repalette</h1>
+        <p>
+          Extract every distinct color from an image, inspect pixel counts and
+          frequencies, and remap colors — one-by-one or via preset palettes —
+          with shade-preserving algorithms. Export recolored PNG and palette
+          JSON/CSS.
+        </p>
+        <p>
+          Repalette is a client-side tool. JavaScript is required to upload an
+          image and run the palette extractor.
+        </p>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
