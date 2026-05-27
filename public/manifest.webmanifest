@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "Repalette",
+  "short_name": "Repalette",
+  "description": "Extract every color from any image. Remap with preset palettes or per-swatch swaps.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1416",
+  "theme_color": "#1a1416",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
