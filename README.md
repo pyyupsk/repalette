@@ -1,75 +1,52 @@
-# React + TypeScript + Vite
+# Repalette
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Extract every distinct color from an image, inspect pixel counts and frequencies, and remap colors — per-swatch or via preset palettes — with shade-preserving algorithms. Exports recolored PNG and palette JSON/CSS.
 
-Currently, two official plugins are available:
+Live: <https://repalette.fasu.dev>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- **React 19** + **TypeScript** with the React Compiler enabled
+- **Vite 8** (Rolldown), **Tailwind 4** with OKLCH-tinted neutrals
+- **Zustand** state, **@tanstack/react-virtual** for the palette list, **@base-ui/react** primitives, **culori** for color science
+- **Bun** package manager and runtime for scripts
+- **oxlint** + **oxfmt** for lint/format; **fallow** for dead-code and duplication audits
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Quick start
 
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+bun install
+bun run dev          # http://localhost:5173
+bun run build        # type-check, build to dist/, verify CSP hashes
+bun run preview      # serve dist/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Other scripts:
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+```bash
+bun run lint         # oxlint
+bun run format       # oxfmt .
+bun run audit        # fallow audit (dead code + duplication)
+bun run verify:csp   # validate dist/_headers hashes match dist/index.html
+```
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Documentation
+
+- [`PRODUCT.md`](./PRODUCT.md) — who the tool is for, what success looks like, anti-references
+- [`DESIGN.md`](./DESIGN.md) — design system (colors, type, elevation, do's and don'ts)
+- [`CLAUDE.md`](./CLAUDE.md) — architecture overview and conventions
+
+## Deployment
+
+Static SPA on Cloudflare Pages with a strict CSP enforced by `public/_headers`. Build output is `dist/`. SPA fallback is handled by `public/_redirects`. The `postbuild` step (`scripts/verify-csp-hashes.ts`) fails the build if inline `<script>` hashes in `dist/index.html` diverge from the `'sha256-…'` tokens in `dist/_headers`.
+
+## Contributing
+
+`main` is protected: PR required, squash-merge only, linear history, signed commits, status check `ci` must pass.
+
+```bash
+git checkout -b feat/<name>
+# ...
+git push -u origin feat/<name>
+gh pr create
 ```
