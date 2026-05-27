@@ -1,9 +1,9 @@
-<!-- SEED: re-run /impeccable document once there's code to capture the actual tokens and components. -->
+---
+name: Repalette
+description: Inspect an image's palette. Remap one color at a time, or by preset. Export.
 ---
 
-name: Repalette
-description: Inspect an image's palette. Remap one color at a time, or by preset. Export
----
+<!-- SEED: re-run /impeccable document once there's code to capture the actual tokens and components. -->
 
 # Design System: Repalette
 
