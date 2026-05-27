@@ -12,7 +12,9 @@
     "format:check": "oxfmt --check .",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "preview": "vite preview"
+    "postbuild": "bun run verify:csp",
+    "preview": "vite preview",
+    "verify:csp": "bun scripts/verify-csp-hashes.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -48,5 +50,8 @@
     "tailwindcss": "^4.3.0",
     "typescript": "~6.0.2",
     "vite": "^8.0.12"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
