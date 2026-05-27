@@ -8,8 +8,7 @@ export const stripHash = (hex: string) => hex.replace(/^#/, "");
 
 export const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
-export const clampByte = (v: number) =>
-  (v < 0 ? 0 : v > 255 ? 255 : v) | 0;
+export const clampByte = (v: number) => (v < 0 ? 0 : v > 255 ? 255 : v) | 0;
 
 export const rgbToHex = ([r, g, b]: RGB) =>
   `#${toHex(r)}${toHex(g)}${toHex(b)}`;

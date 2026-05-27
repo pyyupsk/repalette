@@ -181,7 +181,10 @@ export const buildColorMap = (
       ob = ob * (1 - w) + baseRgb[2] * w;
     }
 
-    out.set(hex, `#${toHex(clampByte(or))}${toHex(clampByte(og))}${toHex(clampByte(ob))}`);
+    out.set(
+      hex,
+      `#${toHex(clampByte(or))}${toHex(clampByte(og))}${toHex(clampByte(ob))}`,
+    );
   }
   return out;
 };
