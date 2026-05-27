@@ -113,7 +113,8 @@ Output:           dist
 `public/_headers` ships a strict CSP using SHA-256 hashes for the two inline `<script>` blocks in `index.html` (JSON-LD + theme bootstrap). The `postbuild` step (`scripts/verify-csp-hashes.ts`) hashes every inline script in `dist/index.html` and fails the build if the set doesn't exactly match the `'sha256-…'` tokens in `dist/_headers`. If you intentionally change an inline script, recompute its hash and update `_headers`:
 
 ```bash
-bun -e 'const h=require("crypto").createHash("sha256").update(require("fs").readFileSync("index.html","utf8").match(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)[INDEX].replace(/<\/?script[^>]*>/g,""),"utf8").digest("base64"); console.log("sha256-"+h)'
+# Run after `bun run build`. Set i = 0 for the JSON-LD script, 1 for the theme bootstrap.
+bun -e 'const i=0; const html=require("fs").readFileSync("dist/index.html","utf8"); const m=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)][i]; if(!m) throw new Error("no inline script at index "+i); console.log("sha256-"+require("crypto").createHash("sha256").update(m[1],"utf8").digest("base64"))'
 ```
 
 `style-src 'unsafe-inline'` is intentional (React inline `style={}` + base-ui/sonner runtime style injection). Don't tighten it without auditing every inline style in the tree.
