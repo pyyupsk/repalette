@@ -3,6 +3,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "../lib/cn";
 import { isLight } from "../lib/colors";
 import { useEffectiveMapping, useStore } from "../state/store";
+import { SectionLabel } from "./ui/section-label";
 
 const ROW_HEIGHT = 32;
 
@@ -34,9 +35,7 @@ export function PaletteList() {
   return (
     <div className="flex flex-1 flex-col overflow-hidden bg-panel">
       <div className="flex items-center justify-between border-b border-hairline px-3 py-2">
-        <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-          Palette · {palette.length} colors
-        </div>
+        <SectionLabel>Palette · {palette.length} colors</SectionLabel>
         <div className="font-mono text-[10px] text-text-dim">
           {mapping.size} mapped
         </div>

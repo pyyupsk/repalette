@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { IconDownload, IconRotate, IconUpload } from "@tabler/icons-react";
 import { useStore } from "../state/store";
 import { ThemeToggle } from "./ThemeToggle";
+import { Button } from "./ui/button";
 
 type Props = {
   onFile: (file: File) => void;
@@ -51,37 +52,33 @@ export function TopBar({ onFile, onExport }: Props) {
           onChange={handleFileChange}
           className="hidden"
         />
-        <button
-          type="button"
+        <Button
           onClick={pickFile}
-          className="flex h-7 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2.5 text-[12px] text-text transition-colors duration-150 hover:bg-raised"
+          icon={<IconUpload size={13} stroke={1.6} />}
         >
-          <IconUpload size={13} stroke={1.6} />
           Upload
-        </button>
+        </Button>
         {image && (
-          <button
-            type="button"
+          <Button
             onClick={reset}
-            className="flex h-7 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2.5 text-[12px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
+            icon={<IconRotate size={13} stroke={1.6} />}
+            className="text-text-mid hover:text-text"
           >
-            <IconRotate size={13} stroke={1.6} />
             Reset
-          </button>
+          </Button>
         )}
         <span className="mx-1 h-5 w-px bg-hairline" aria-hidden />
         <ThemeToggle />
         <span className="mx-1 h-5 w-px bg-hairline" aria-hidden />
-        <button
-          type="button"
+        <Button
+          variant="accent"
           onClick={onExport}
           disabled={!image}
-          className="flex h-7 items-center gap-1.5 rounded-md bg-accent px-3 text-[12px] font-medium text-text shadow-[inset_0_0_0_1px_oklch(70%_0.25_350)] transition-opacity duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
-          style={{ color: "oklch(14% 0.01 350)" }}
+          icon={<IconDownload size={13} stroke={1.6} />}
+          className="px-3 shadow-[inset_0_0_0_1px_oklch(70%_0.25_350)]"
         >
-          <IconDownload size={13} stroke={1.6} />
           Export
-        </button>
+        </Button>
       </div>
     </header>
   );

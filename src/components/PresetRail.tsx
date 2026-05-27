@@ -2,6 +2,7 @@ import { cn } from "../lib/cn";
 import { type HueBucket, type Preset, presets } from "../lib/presets";
 import { buildColorMap } from "../lib/remap";
 import { useStore } from "../state/store";
+import { SectionLabel } from "./ui/section-label";
 
 const ACCENT_ORDER: HueBucket[] = [
   "red",
@@ -143,13 +144,5 @@ export function PresetRail() {
         </div>
       </div>
     </aside>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-      {children}
-    </div>
   );
 }

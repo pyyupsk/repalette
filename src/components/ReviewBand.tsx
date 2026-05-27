@@ -1,5 +1,6 @@
 import { IconCheck, IconRotate } from "@tabler/icons-react";
 import { useStore } from "../state/store";
+import { Button } from "./ui/button";
 
 export function ReviewBand() {
   const previewPreset = useStore((s) => s.previewPreset);
@@ -30,23 +31,22 @@ export function ReviewBand() {
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <button
-          type="button"
+        <Button
+          size="sm"
           onClick={revertPreview}
-          className="flex h-6 items-center gap-1.5 rounded border border-hairline bg-panel px-2 font-mono text-[11px] text-text-mid transition-colors duration-150 hover:bg-raised hover:text-text"
+          icon={<IconRotate size={11} stroke={1.6} />}
+          className="text-text-mid hover:text-text"
         >
-          <IconRotate size={11} stroke={1.6} />
           Revert
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          size="sm"
+          variant="accent"
           onClick={commitPreview}
-          className="flex h-6 items-center gap-1.5 rounded bg-accent px-2 font-mono text-[11px] font-medium transition-opacity duration-150 hover:opacity-90"
-          style={{ color: "oklch(14% 0.01 350)" }}
+          icon={<IconCheck size={11} stroke={1.6} />}
         >
-          <IconCheck size={11} stroke={1.6} />
           Commit
-        </button>
+        </Button>
       </div>
     </div>
   );

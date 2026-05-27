@@ -11,6 +11,7 @@
   --color-text-mid: var(--text-mid);
   --color-text-dim: var(--text-dim);
   --color-accent: oklch(70% 0.25 350);
+  --color-accent-fg: oklch(14% 0.01 350);
   --color-accent-soft: oklch(70% 0.25 350 / 0.18);
   --color-accent-ring: oklch(70% 0.25 350 / 0.4);
 

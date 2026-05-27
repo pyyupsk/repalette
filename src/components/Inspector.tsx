@@ -7,6 +7,7 @@ import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 import { hexToRgb, isLight, rgbToHex } from "../lib/colors";
 import { useEffectiveMapping, useStore } from "../state/store";
+import { SectionLabel } from "./ui/section-label";
 
 const isValidHex = (s: string) => /^#?[0-9a-f]{6}$/i.test(s);
 
@@ -25,9 +26,7 @@ export function Inspector() {
   if (!swatch || !selectedHex || !currentTarget) {
     return (
       <div className="flex flex-1 flex-col overflow-hidden border-t border-hairline bg-panel">
-        <div className="px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-          Inspector
-        </div>
+        <SectionLabel className="px-3 py-2">Inspector</SectionLabel>
         <div className="grid flex-1 place-items-center px-3 font-mono text-[11px] text-text-dim">
           select a color
         </div>
@@ -102,9 +101,7 @@ function InspectorBody({
   return (
     <div className="flex flex-1 flex-col overflow-hidden border-t border-hairline bg-panel">
       <div className="flex items-center justify-between border-b border-hairline px-3 py-2">
-        <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-          Inspector
-        </div>
+        <SectionLabel>Inspector</SectionLabel>
         <button
           type="button"
           onClick={reset}
@@ -139,17 +136,13 @@ function InspectorBody({
           </Popover.Root>
           <div className="flex flex-1 flex-col justify-between py-0.5">
             <div className="flex flex-col gap-0.5">
-              <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-                Source
-              </div>
+              <SectionLabel>Source</SectionLabel>
               <div className="flex items-center gap-2 font-mono text-[13px] text-text-mid">
                 {hex.replace(/^#/, "")}
               </div>
             </div>
             <div className="flex flex-col gap-0.5">
-              <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-                {edited ? "Mapped to" : "No edit"}
-              </div>
+              <SectionLabel>{edited ? "Mapped to" : "No edit"}</SectionLabel>
               <div className="flex items-center gap-2 font-mono text-[13px] text-text">
                 <input
                   value={draft}
@@ -192,17 +185,13 @@ function InspectorBody({
 
         <div className="flex items-center justify-between border-t border-hairline pt-3">
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-              Pixel count
-            </span>
+            <SectionLabel>Pixel count</SectionLabel>
             <span className="font-mono text-[12px] tabular-nums text-text">
               {count.toLocaleString()}
             </span>
           </div>
           <div className="flex flex-col items-end gap-0.5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-text-dim">
-              Share
-            </span>
+            <SectionLabel>Share</SectionLabel>
             <span className="font-mono text-[12px] tabular-nums text-text">
               {pct.toFixed(2)}%
             </span>
