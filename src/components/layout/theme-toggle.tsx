@@ -1,5 +1,5 @@
 import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { type Theme, useStore } from "@/state/store";
 
 const order: Theme[] = ["light", "dark", "system"];

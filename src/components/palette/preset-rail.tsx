@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { type HueBucket, type Preset, presets } from "@/lib/presets";
 import { buildColorMap } from "@/lib/remap";
 import { useStore } from "@/state/store";
